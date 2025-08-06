@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --mood-color: #E5E7EB;
+  --mood-glow: rgba(229, 231, 235, 0.6);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+/* Custom scrollbar with silver theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--mood-color), rgba(255, 255, 255, 0.8));
+  border-radius: 4px;
+  box-shadow: 0 0 10px var(--mood-glow);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #F3F4F6, #E5E7EB);
+  box-shadow: 0 0 15px var(--mood-glow);
+}
+
+/* Loading animation keyframes */
+@keyframes loading-progress {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(400%);
+    opacity: 0.5;
+  }
+}
+
+/* Silver glow animations */
+@keyframes silver-glow {
+  0%, 100% {
+    box-shadow: 0 0 10px var(--mood-glow), 0 0 20px var(--mood-glow), 0 0 30px var(--mood-glow);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--mood-glow), 0 0 40px var(--mood-glow), 0 0 60px var(--mood-glow);
+  }
+}
+
+.silver-glow-animation {
+  animation: silver-glow 3s ease-in-out infinite;
+}
+
+/* Enhanced edge lighting effect */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(0deg, var(--mood-glow) 0%, transparent 5%, transparent 95%, var(--mood-glow) 100%),
+    linear-gradient(90deg, var(--mood-glow) 0%, transparent 5%, transparent 95%, var(--mood-glow) 100%);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.15;
+}
+
+/* Backdrop blur enhancement */
+.backdrop-blur-2xl {
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+}
+
+/* Text glow effects */
+.text-glow {
+  text-shadow: 0 0 10px var(--mood-glow), 0 0 20px var(--mood-glow);
+}
+
+/* Button hover effects */
+.btn-silver-glow:hover {
+  box-shadow: 0 0 25px var(--mood-glow), inset 0 0 15px var(--mood-glow);
+  transform: translateY(-2px);
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced glass morphism */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Metallic silver gradient */
+.silver-gradient {
+  background: linear-gradient(135deg, #F9FAFB, #E5E7EB, #D1D5DB, #F3F4F6);
+}
