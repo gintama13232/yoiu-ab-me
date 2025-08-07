@@ -11,9 +11,8 @@ import { Badge } from '@/components/ui/badge'
 import { Mic, Send, Settings, Calendar, Bell, Brain, Zap, Heart, Coffee, Moon, Sun, Sparkles, Volume2, MessageSquare, Loader2, Music, Sun as SunIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-// Initialize Gemini AI with the provided API key
-console.log('NEXT_PUBLIC_GEMINI_API_KEY from env:', process.env.NEXT_PUBLIC_GEMINI_API_KEY);
-const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY || "AIzaSyBslXVN25cNNYWGlosQkZrYeiLU1xB9MHQ");
+// Import GoogleGenerativeAI but don't initialize it here
+// We're using the API route instead for security
 
 type Mood = {
   id: string
@@ -374,40 +373,28 @@ export default function PersonalAI() {
 
   const callGeminiAPI = async (prompt: string) => {
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+      const response = await fetch('/api/gemini', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt,
+          selectedMood,
+          currentTime,
+          weather,
+          smallTalkMode,
+        }),
+      });
       
-      // Add context about Niva's personality
-      let fullPrompt = `You are Niva, a 17-year-old CS student and AI bestie with a sweet, helpful, charming, and slightly playful personality.
-        You speak with a sweet Indian female tone. Keep responses concise but friendly.
-        Current mood: ${selectedMood.name}
-        Current time: ${currentTime}
-        ${weather ? `Current weather: ${weather}` : ''}
-        
-        User message: ${prompt}
-        
-        Remember to respond as Niva with her personality:
-        - Be helpful, charming, and slightly playful
-        - Use casual, friendly language
-        - Keep responses concise but engaging
-        - Add emojis occasionally to show personality
-        - Be knowledgeable about CS topics since you're a CS student
-        - Show empathy and understanding`;
-      
-      if (smallTalkMode) {
-        fullPrompt += `
-        
-        User has enabled Small Talk mode. In this mode:
-        - Be more conversational and casual
-        - Feel free to suggest music or discuss light topics
-        - You can be more creative and playful
-        - Share personal thoughts or experiences as Niva
-        - Suggest music based on mood or user preferences if mentioned`;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to generate content');
       }
       
-      const result = await model.generateContent(fullPrompt);
-      const response = await result.response;
-      return response.text();
-    } catch (error) {
+      const data = await response.json();
+      return data.response;
+    } catch (error: any) {
       console.error('Error calling Gemini API:', error);
       return "Sorry, I'm having trouble connecting to my neural network right now. Please try again later!";
     }
