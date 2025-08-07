@@ -12,8 +12,8 @@ import { Mic, Send, Settings, Calendar, Bell, Brain, Zap, Heart, Coffee, Moon, S
 import { cn } from '@/lib/utils'
 
 // Initialize Gemini AI with the provided API key
-console.log('GEMINI_API_KEY from env:', process.env.GEMINI_API_KEY);
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "AIzaSyBslXVN25cNNYWGlosQkZrYeiLU1xB9MHQ");
+console.log('NEXT_PUBLIC_GEMINI_API_KEY from env:', process.env.NEXT_PUBLIC_GEMINI_API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY || "AIzaSyBslXVN25cNNYWGlosQkZrYeiLU1xB9MHQ");
 
 type Mood = {
   id: string
