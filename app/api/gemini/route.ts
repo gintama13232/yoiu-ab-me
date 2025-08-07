@@ -2,6 +2,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
 
 // Initialize Gemini AI with the provided API key
+console.log('GEMINI_API_KEY from env:', process.env.GEMINI_API_KEY);
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 export async function POST(request: Request) {
@@ -9,7 +10,9 @@ export async function POST(request: Request) {
     const { prompt, selectedMood, currentTime, weather, smallTalkMode } = await request.json();
     
     // Check if API key is available
+    console.log('API Key in POST handler:', process.env.GEMINI_API_KEY);
     if (!process.env.GEMINI_API_KEY) {
+      console.error('API key not configured');
       return NextResponse.json(
         { error: 'API key not configured' },
         { status: 500 }
@@ -46,9 +49,11 @@ export async function POST(request: Request) {
       - Suggest music based on mood or user preferences if mentioned`;
     }
     
+    console.log('Sending prompt to Gemini API:', fullPrompt);
     const result = await model.generateContent(fullPrompt);
     const response = await result.response;
     const text = response.text();
+    console.log('Received response from Gemini API:', text);
     
     return NextResponse.json({ response: text });
   } catch (error: any) {
